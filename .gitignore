@@ -1,0 +1,12 @@
+.idea/
+**/target/
+**/bin
+
+# Terraform
+**/.terraform
+**/terraform.tfplan
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/terraform.tfstate.d
+**/*.auto.tfvars
+**/.terraform.lock.hcl
