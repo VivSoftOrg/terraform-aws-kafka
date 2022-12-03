@@ -44,13 +44,6 @@ variable "manager_instance_type" {
 }
 
 #################
-# Providers
-#################
-provider "aws" {
-  region = var.aws_region
-}
-
-#################
 # Data
 #################
 data "aws_vpc" "this" {
