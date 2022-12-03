@@ -57,7 +57,7 @@ data "aws_vpc" "this" {
   filter {
     name = "tag:Name"
     values = [
-      "h5p"
+      "viv-dev-vpc"
     ]
   }
   filter {
@@ -72,7 +72,7 @@ data "aws_subnet_ids" "private" {
   vpc_id = data.aws_vpc.this.id
 
   tags = {
-    Name = "h5p-private-use1c"
+    Name = "*private*"
   }
 }
 
@@ -86,7 +86,7 @@ data "aws_subnet_ids" "public" {
 
 data "aws_ami" "enbuild" {
   name_regex = "enbuild-kafka-2.5.1-hvm-*"
-  owners = ["self"]
+  owners = ["986602297069"]
   filter {
     name = "state"
     values = ["available"]
@@ -98,6 +98,12 @@ data "aws_ami" "enbuild" {
 #################
 # Modules
 #################
+module "keypair" {
+  source      = "rhythmictech/secretsmanager-keypair/aws"
+  name_prefix = var.ssh_key_name
+  description = "SSH keypair for kafka instances"
+}
+
 module "cluster" {
   source = "../.."
   manager_admin_password = var.manager_admin_password
@@ -112,7 +118,7 @@ module "cluster" {
   vpc_id = data.aws_vpc.this.id
   private_subnet_ids = data.aws_subnet_ids.private.ids
   public_subnet_ids = data.aws_subnet_ids.public.ids
-  key_pair_name = var.ssh_key_name
+  key_pair_name = module.keypair.key_name # var.ssh_key_name
   public_zone_id = var.public_zone_id
   allowed_cidrs = var.allowed_cidrs
   enbuild_ami_id = data.aws_ami.enbuild.id

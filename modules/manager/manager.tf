@@ -175,7 +175,8 @@ resource "aws_security_group_rule" "ingress-ssh" {
   type = "ingress"
   security_group_id = aws_security_group.private.id
   cidr_blocks = [
-    data.aws_vpc.this.cidr_block
+    data.aws_vpc.this.cidr_block,
+	var.allowed_cidrs.ipv4
   ]
   from_port = "22"
   to_port = "22"
