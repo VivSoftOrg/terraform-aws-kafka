@@ -573,6 +573,7 @@ resource "aws_lb_listener_rule" "cruise-api" {
 # Routing
 #################
 data "aws_route53_zone" "public" {
+  count = var.lb_enabled ? 1 : 0
   zone_id = var.public_zone_id
   private_zone = false
 }
